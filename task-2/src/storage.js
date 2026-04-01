@@ -3,23 +3,12 @@
 // Currently it uses a JSON file on disk.
 // In the assignment you will replace each function here with a SQLite query.
 
-import { readFileSync, writeFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { readFileSync, writeFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_FILE = join(__dirname, '../data/data.json');
-
-// --- helpers (you will remove these when you switch to SQLite) ---
-
-function readData() {
-  const raw = readFileSync(DATA_FILE, 'utf-8');
-  return JSON.parse(raw);
-}
-
-function writeData(data) {
-  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
-}
+const DATA_FILE = join(__dirname, "../data/data.json");
 
 // ----------------------------------------------------------------
 // Decks
@@ -32,12 +21,12 @@ export function getAllDecks() {
 
 export function getDeckById(id) {
   const data = readData();
-  return data.decks.find(d => d.id === id) ?? null;
+  return data.decks.find((d) => d.id === id) ?? null;
 }
 
 export function addDeck(name, description) {
   const data = readData();
-  const newId = Math.max(0, ...data.decks.map(d => d.id)) + 1;
+  const newId = Math.max(0, ...data.decks.map((d) => d.id)) + 1;
   const deck = { id: newId, name, description };
   data.decks.push(deck);
   writeData(data);
@@ -46,7 +35,7 @@ export function addDeck(name, description) {
 
 export function deleteDeck(deckId) {
   const data = readData();
-  const index = data.decks.findIndex(d => d.id === deckId);
+  const index = data.decks.findIndex((d) => d.id === deckId);
   if (index === -1) return false;
   data.decks.splice(index, 1);
   writeData(data);
@@ -59,12 +48,12 @@ export function deleteDeck(deckId) {
 
 export function getAllCardsForDeck(deckId) {
   const data = readData();
-  return data.cards.filter(c => c.deckId === deckId);
+  return data.cards.filter((c) => c.deckId === deckId);
 }
 
 export function addCard(question, answer, deckId) {
   const data = readData();
-  const newId = Math.max(0, ...data.cards.map(c => c.id)) + 1;
+  const newId = Math.max(0, ...data.cards.map((c) => c.id)) + 1;
   const card = { id: newId, question, answer, learned: false, deckId };
   data.cards.push(card);
   writeData(data);
@@ -73,7 +62,7 @@ export function addCard(question, answer, deckId) {
 
 export function markCardLearned(cardId) {
   const data = readData();
-  const card = data.cards.find(c => c.id === cardId);
+  const card = data.cards.find((c) => c.id === cardId);
   if (!card) return null;
   card.learned = true;
   writeData(data);
@@ -82,7 +71,7 @@ export function markCardLearned(cardId) {
 
 export function deleteCard(cardId) {
   const data = readData();
-  const index = data.cards.findIndex(c => c.id === cardId);
+  const index = data.cards.findIndex((c) => c.id === cardId);
   if (index === -1) return false;
   data.cards.splice(index, 1);
   writeData(data);
